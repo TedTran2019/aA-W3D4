@@ -140,3 +140,24 @@ grid-template: row row / col col
 http://cssgridgarden.com/
 ------------------------------------------------
 
+bundle exec rspec
+#as_json and #to_sql useful for debugging
+find and find_by both return first matching instance
+where returns collection of objects
+
+Notice @id and self.id, how one works for ApplicationRecord and the other doesn't.
+Notice how it's the same for all the association usage as well...
+Your better tracks query wasn't functioning in beginning because you put 
+albums instead of self.albums!
+
+img width 100% is pretty useful in reset.css
+Rookie mistake! -> Put col-1-3 and forgot to put "col" as well when 
+giving class attributes. Ie. class name="col col-1-3"
+
+#pluck -> converts directly into ruby array instead of ActiveRecord object
+
+Personal mistakes: 
+1. Didn't use .column_name, did [column_name] instead
+2. Used subqueries in SQL instead of setting it like, subquery = TableName.select...etc
+  then using it in the main query.
+3. Used DISTINCT in sql instead of .distinct
