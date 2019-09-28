@@ -1,0 +1,142 @@
+Queries are lazy -> queries return an ActiveRecord::Relation object
+The relation object is like an array-- can be interated/indexed
+Contents of relation isn' fetched til' needed ( LAZINESS )
+Not evaluated until it is needed!
+
+Once the query is run, result is cached (stored for later use)
+Sometimes gotcha happens (cached result is outdated), can force 
+to reload by calling .association(true) or using .reload
+
+Laziness allows complex queries to be built (method chaining)
+You can call load to force the evaluation of a relation! 
+Methods like count also forces evaluation
+
+Count vs Length vs Size?
+1. Count -> SQL query
+2. Length -> loads entire collection, to_a, then array.length
+  a. Use length if you need to load the entire collection anyway
+3. size -> count if already loaded, else query 
+
+force: true means drop the table b4 creating
+
+When using joins method, usually name of an association is passed in, 
+NOT a table. Specifying model == using that table.  
+Can also use the joins method on any relation object!
+If select isn't called with joins, you'll only have access to the cols 
+from the primary table in our query. Use #attributes to see all attributes
+Should be aliasing when selecting if joining and there are same col names
+
+newrelic_rpm -> performance management system
+https://github.com/newrelic/rpm/
+bullet -> kills N + 1 queries and unused eager loading
+https://github.com/flyerhzm/bullet
+meta_request -> rails panel 
+https://github.com/dejan/rails_panel
+
+N + 1 queries
+1 query to find users x
+N queries, one per x to find all y
+Etc. User has 10k posts, make 10,001 queries to find all comments
+Use includes method -> prefetch (eager loading)
+Etc. in Class User, self.posts.includes(:comments) to solve the above issue 
+N + 1 queries are ALWAYS an error!
+
+You can eagerly load as many associations as you like! 
+Can also do nested prefetches like .includes(:comments => [:author, :parent_comment])
+This will prefetch comments, author, and parent_comment so you can index/iterate 
+without firing additional DB queries.
+
+Can also use JOINS to solve N + 1 queries without having too much 
+information returned.
+
+joins and left_outer_joins!
+
+Using includes with references. References indicates that table_names are 
+referenced, and therefore should be joined instead of loaded separately. 
+This changes 2 queries into 1 query.
+
+#preload -> loads association data in separate query
+#include -> same as preload but smarter, can switch to what eager_load does 
+  in some cases or when references is used
+#eager_load -> loads all associations in a single query
+#joins -> uses inner join to bring data
+
+Write commonly used queries into a scope! 
+Returns relation object -> can continue method chaining or use with association
+Just the same as defining a class method
+Can do scope: name, -> { where(etc: whatever) } to create a class method
+
+find(id), find_by(options)
+find raises an exception, find_by returns nil when object isn't found
+
+order, group, having -> can also apply all typical aggregations
+
+find_by_sql -> Use pure SQL to get whatever you want. **********************
+
+Rubocop -> @, self, no self.. private attrs
+self -> when you want to use the method to access an instance variable, 
+rather than just getting it directly. I'm assuming for some things, 
+just directly accessing the instance variable will result in strange input.
+
+Grid system and Flexbox -> Modern!
+
+Old school -> floats and clearfix
+Values for float: left, right, none, inherit
+clear: none, left, right, both, inherit (Don't tolerate float, goes below it)
+
+How to stop the float and contain?
+After the float... 
+
+.clearfix:after {
+  content: "";
+  display: block;
+  clear: both;
+} 
+on whatever contains a float element
+
+Creating own fluid grid layout -> using float property and percenages
+Think about how float elements interact with each other, and with block elements
+Think about with or without clearfix
+Changing to border-box so you don't need constant recalculations 
+
+:last-of-type is quite useful.
+Never have float + position specified on the same element.
+
+---------------
+
+.includes uses eager loading while joins use lazy loading
+SQL ->Ternary logic -> compare to NULL -> interpolation problem! -> 
+what if you interpolate against NULL? -> Rails .where handles 
+this for us unless we specify with SQL fragments 
+Instead of !=, can use .where.not
+
+Grid Garden
+------------
+grid-column-start - grid_column-end (Start at 1, up to but not including end)
+Can start with a higher end and lower start to go backwards.
+Can also use negative values to iterate backwards
+Can use "span" to decide column width instead
+Think span in start vs end
+grid-column is a shorthand property for both start/end
+grid-column: start / end; (Can use span with this as well)
+If you want to do rows instead, can use grid-row with all the same 
+logic as grid-column
+grid-area : row_start / column_start / row_end / column_end
+Automatically placed by order if not explicitly stated, can override 
+this by using the "order" property. Default order value is 0
+
+display: grid -> Setup grid
+grid-template-rows: % % %; 
+grid-template-columns: % % %;
+To setup! As many percentages as you want
+Can use repeat(nbr, %) so not have to write it out again and again.
+Values don't have to be percentages-- can also be px, em, or whatever else.
+Can also mix all of these different values together!
+Grid introduces a new unit: fr -> each fr is one unit of available space, 
+can set something to like 3fr and something else to 1fr, etc
+If space is set with other units, fr will divvy all leftover space!
+ie. 50px 1fr 1fr 1fr 50px -> 5 columns, with 2 50px and 3 same size w/ remaining
+grid-template: row row / col col 
+http://cssgridgarden.com/
+------------------------------------------------
+
