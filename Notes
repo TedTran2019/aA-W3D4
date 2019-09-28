@@ -161,3 +161,4 @@ Personal mistakes:
 2. Used subqueries in SQL instead of setting it like, subquery = TableName.select...etc
   then using it in the main query.
 3. Used DISTINCT in sql instead of .distinct
+4. Should have thought more about the whazzaname matcher problem! % wildcard...
