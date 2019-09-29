@@ -162,3 +162,13 @@ Personal mistakes:
   then using it in the main query.
 3. Used DISTINCT in sql instead of .distinct
 4. Should have thought more about the whazzaname matcher problem! % wildcard...
+
+Attributes is really useful for debugging.
+Ended not doing the "completed_polls" bonus -> Think it would be easier just to 
+do it in pure SQL, rather than forcing it in ActiveRecord. 
+
+You got arrogant-- follow instructions next time rather than skipping thru.
+Follow instructions -> pure SQL -> convert to AR
+
+dependent: :destroy doesn't seem to work w/ through associations! You 
+have to add dependent: :destroy to whatever you're going thru
