@@ -2,7 +2,8 @@ class Question < ApplicationRecord
   validates :poll, :text, presence: true
   validates :text, uniqueness: { scope: :poll_id }
 
-  has_many :answer_choices
+  has_many :answer_choices,
+  dependent: :destroy
 
   belongs_to :poll
 
